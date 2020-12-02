@@ -2,17 +2,27 @@ package com.sbs.selenium.exam;
 
 public class DCInsideArticle {
 	
+	private String code;
 	private String title;
-	private String writing;
-	private String lede;
+	private String redDate;
 
 
-	public DCInsideArticle(String title, String writing, String lede) {
+	public DCInsideArticle(String code, String title, String redDate) {
 
+		this.code = code;
 		this.title = title;
-		this.writing = writing;
-		this.lede = lede;
+		this.redDate = redDate;
 
+	}
+
+
+	public String getCode() {
+		return code;
+	}
+
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 
@@ -26,25 +36,17 @@ public class DCInsideArticle {
 	}
 
 
-	public String getWriting() {
-		return writing;
+	public String getRedDate() {
+		return redDate;
 	}
 
 
-	public void setWriting(String writing) {
-		this.writing = writing;
+	public void setRedDate(String redDate) {
+		this.redDate = redDate;
 	}
 
 
-	public String getLede() {
-		return lede;
-	}
-
-
-	public void setLede(String lede) {
-		this.lede = lede;
-	}
-
+	
 
 
 

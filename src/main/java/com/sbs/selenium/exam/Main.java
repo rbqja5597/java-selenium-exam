@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import javax.imageio.ImageIO;
 
@@ -47,20 +46,24 @@ public class Main {
 
 		// 첫번째 탭으로 전환
 		driver.switchTo().window(tabs.get(0));
-		driver.get("https://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=001");
+		driver.get("https://news.daum.net/society#1");
 
 		Util.sleep(1000);
 
-		List<WebElement> elements = driver.findElements(By.cssSelector("div.list_body .type06_headline"));
+		List<WebElement> elements = driver.findElements(By.cssSelector(".list_timenews"));
 
 		for (WebElement element : elements) {
-			String title = element.findElements(By.cssSelector("dt:nth-child(2)")).get(0).getText().trim();
-			String lede = element.findElements(By.cssSelector(".lede")).get(0).getText().trim();
-			String writing = element.findElements(By.cssSelector(".writing")).get(0).getText().trim();
-			 
+			WebElement aElement = element.findElement(By.cssSelector(".tit_timenews > a"));
+			String href = aElement.getAttribute("href").trim();
+			href = href.split("data-tiara-id=")[1];
 			
-			DCInsideArticle article = new DCInsideArticle(title, writing, lede);
-			System.out.printf("%s / %s / %s \n",title, lede, writing);
+			String code = href.split("&")[0];
+			String title = element.findElements(By.cssSelector(".tit_timenews > a")).get(0).getText().trim();
+			String regDate = element.findElements(By.cssSelector(".txt_time")).get(0).getText().trim();
+			
+			
+			DCInsideArticle article = new DCInsideArticle(code, title, regDate);
+			System.out.println(article);
 		}	
 
 	}
