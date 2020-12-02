@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.imageio.ImageIO;
 
@@ -19,11 +20,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class Main {
 
 	public static void main(String[] args) {
-		printArticle();
+		DcinsideprintArticle();
 
 	}
 
-	private static void printArticle() {
+	private static void DcinsideprintArticle() {
 		Path path = Paths.get(System.getProperty("user.dir"), "src/main/resources/chromedriver.exe");
 
 		// WebDriver 경로 설정
@@ -34,30 +35,33 @@ public class Main {
 		options.addArguments("--start-maximized"); // 전체화면으로 실행
 		options.addArguments("--disable-popup-blocking"); // 팝업 무시
 		options.addArguments("--disable-default-apps"); // 기본앱 사용안함
+		// options.setHeadless(true);
 
 		// WebDriver 객체 생성
 		ChromeDriver driver = new ChromeDriver(options);
 
 		// 빈 탭 생성
-		// driver.executeScript("window.open('about:blank', '_blank');");
+		// driver.executeScript("window.open('about:blank','_blank');");
 
 		List<String> tabs = new ArrayList<String>(driver.getWindowHandles());
 
 		// 첫번째 탭으로 전환
 		driver.switchTo().window(tabs.get(0));
-		driver.get("http://dpg.danawa.com/bbs/list?boardSeq=11");
+		driver.get("https://news.naver.com/main/list.nhn?mode=LSD&mid=sec&sid1=001");
 
 		Util.sleep(1000);
 
-		List<WebElement> elements = driver
-				.findElements(By.cssSelector("div.article .bbs_list > .bbs_table>.normal_group .title"));
+		List<WebElement> elements = driver.findElements(By.cssSelector("div.list_body .type06_headline"));
 
 		for (WebElement element : elements) {
-			String title = element.getText().trim();
-			System.out.println(title);
+			String title = element.findElements(By.cssSelector("dt:nth-child(2)")).get(0).getText().trim();
+			String lede = element.findElements(By.cssSelector(".lede")).get(0).getText().trim();
+			String writing = element.findElements(By.cssSelector(".writing")).get(0).getText().trim();
+			 
 			
-			
-		}
+			DCInsideArticle article = new DCInsideArticle(title, writing, lede);
+			System.out.printf("%s / %s / %s \n",title, lede, writing);
+		}	
 
 	}
 
